@@ -1,0 +1,47 @@
+: add ( n1 n2 -- n3 )  + ;
+: subtract ( n1 n2 -- n3 )  - ;
+: multiply ( n1 n2 -- n3 )  * ;
+: divide ( n1 n2 -- n3 )  / ;
+
+: calculate ( -- )
+    ." Enter first number: " 0 .  ( Prompt for first number )
+    accept  ( Read input )
+    >number drop  ( Convert string to number, drop the remainder )
+    dup >r  ( Duplicate first number and store it on the return stack )
+
+    ." Enter operation (+, -, *, /): " 0 .  ( Prompt for operation )
+    accept  ( Read input )
+    >number drop  ( Convert string to number, drop the remainder )
+    r>  ( Retrieve first number from the return stack )
+    dup >r  ( Duplicate first number and store it on the return stack )
+
+    ." Enter second number: " 0 .  ( Prompt for second number )
+    accept  ( Read input )
+    >number drop  ( Convert string to number, drop the remainder )
+    r>  ( Retrieve first number from the return stack )
+
+    case
+        '+' of r@ r> add . endof
+        '-' of r@ r> subtract . endof
+        '*' of r@ r> multiply . endof
+        '/' of r@ r> divide . endof
+        drop ." Error: Unsupported operation" cr
+    endcase
+;
+
+: main ( -- )
+    ." Simple Forth Calculator" cr
+    begin
+        calculate
+        ." Do you want to perform another calculation? (y/n): " 0 . 
+        accept 
+        'y' = if 
+            cr 
+        else 
+            ." Goodbye!" cr 
+            exit 
+        then
+    again
+;
+
+main
